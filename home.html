@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        body { background: #050505; font-family: 'Orbitron', sans-serif; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .banner-img { width: 100%; height: 200px; border-radius: 20px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-hover:hover { transform: translateY(-2px); transition: 0.3s; }
+        .chat-bubble { border-left: 4px solid #ec4899; }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-2xl mx-auto">
+
+    <!-- Banner Section -->
+    <div class="swiper mySwiper mb-8">
+        <div class="swiper-wrapper" id="banner-container">
+            <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e" class="banner-img"></div>
+            <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1511512578047-dfb367046420" class="banner-img"></div>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="glass p-5 rounded-2xl text-center">
+            <p class="text-[10px] text-gray-400">ACTIVE USERS</p>
+            <h2 class="text-2xl font-bold" id="active-count">0</h2>
+        </div>
+        <div class="glass p-5 rounded-2xl text-center">
+            <p class="text-[10px] text-gray-400">TOTAL REG</p>
+            <h2 class="text-2xl font-bold" id="total-reg">0</h2>
+        </div>
+        <div class="glass p-5 rounded-2xl text-center col-span-2">
+            <p class="text-[10px] text-gray-400">MY COINS</p>
+            <h2 class="text-3xl font-bold text-yellow-500" id="my-coins">0</h2>
+            <button onclick="collectCoin()" class="mt-2 w-full py-2 bg-yellow-600 rounded-lg text-xs font-bold btn-hover">COLLECT DAILY COIN</button>
+        </div>
+    </div>
+
+    <!-- Admin Chat Notice Box -->
+    <div class="glass p-6 rounded-3xl mb-8 relative">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-sm font-bold text-pink-500 flex items-center gap-2">
+                ADMIN CHAT 
+                <span id="notif-badge" class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                </span>
+            </h2>
+            <span class="text-[10px] bg-pink-500/20 px-3 py-1 rounded-full border border-pink-500/20" id="seen-status">0 Seen</span>
+        </div>
+
+        <div class="bg-black/40 p-4 rounded-2xl border border-white/5 shadow-inner chat-bubble">
+            <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 flex items-center justify-center text-[10px] font-bold">AD</div>
+                <div id="notice-content" class="text-xs text-gray-200 leading-relaxed">
+                    Welcome to the tournament! Stay tuned for updates.
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex gap-2 mt-4">
+            <button onclick="react('❤️')" class="text-xs bg-white/5 px-3 py-1 rounded-full hover:bg-pink-500/20 transition">❤️</button>
+            <button onclick="react('👍')" class="text-xs bg-white/5 px-3 py-1 rounded-full hover:bg-blue-500/20 transition">👍</button>
+        </div>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="grid grid-cols-2 gap-4">
+        <a href="https://t.me/+HrEHLM9TOnowMDll" target="_blank" 
+           class="flex items-center justify-center gap-2 py-4 bg-[#229ED9] rounded-2xl font-bold text-sm btn-hover shadow-lg shadow-[#229ED9]/20">
+            Telegram
+        </a>
+        <a href="coming_soon.html" 
+           class="flex items-center justify-center gap-2 py-4 bg-white text-black rounded-2xl font-bold text-sm btn-hover">
+            Main Site
+        </a>
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".mySwiper", { loop: true, autoplay: { delay: 3000 } });
+
+        function collectCoin() {
+            alert("Coin collected! Daily bonus added.");
+        }
+
+        function react(emoji) {
+            alert("You reacted with " + emoji);
+            // Firebase-এ রিয়েক্ট সেভ করার কোড এখানে হবে
+        }
+    </script>
+</body>
+</html>
