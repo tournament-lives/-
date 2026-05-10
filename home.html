@@ -38,62 +38,61 @@
         <div class="glass p-5 rounded-2xl text-center col-span-2">
             <p class="text-[10px] text-gray-400">MY COINS</p>
             <h2 class="text-3xl font-bold text-yellow-500" id="my-coins">0</h2>
-            <button onclick="collectCoin()" class="mt-2 w-full py-2 bg-yellow-600 rounded-lg text-xs font-bold btn-hover">COLLECT DAILY COIN</button>
+            <button onclick="collectCoin()" id="claimBtn" class="mt-2 w-full py-2 bg-yellow-600 rounded-lg text-xs font-bold btn-hover">CLAIM DAILY COIN</button>
         </div>
     </div>
 
     <!-- Admin Chat Notice Box -->
     <div class="glass p-6 rounded-3xl mb-8 relative">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-sm font-bold text-pink-500 flex items-center gap-2">
-                ADMIN CHAT 
-                <span id="notif-badge" class="relative flex h-3 w-3">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                </span>
-            </h2>
+            <h2 class="text-sm font-bold text-pink-500 flex items-center gap-2">ADMIN CHAT</h2>
             <span class="text-[10px] bg-pink-500/20 px-3 py-1 rounded-full border border-pink-500/20" id="seen-status">0 Seen</span>
         </div>
-
         <div class="bg-black/40 p-4 rounded-2xl border border-white/5 shadow-inner chat-bubble">
             <div class="flex items-start gap-3">
                 <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 flex items-center justify-center text-[10px] font-bold">AD</div>
-                <div id="notice-content" class="text-xs text-gray-200 leading-relaxed">
-                    Welcome to the tournament! Stay tuned for updates.
-                </div>
+                <div id="notice-content" class="text-xs text-gray-200 leading-relaxed">Loading notice...</div>
             </div>
         </div>
-        
-        <div class="flex gap-2 mt-4">
-            <button onclick="react('❤️')" class="text-xs bg-white/5 px-3 py-1 rounded-full hover:bg-pink-500/20 transition">❤️</button>
-            <button onclick="react('👍')" class="text-xs bg-white/5 px-3 py-1 rounded-full hover:bg-blue-500/20 transition">👍</button>
-        </div>
     </div>
 
-    <!-- Footer Links -->
+    <!-- Footer -->
     <div class="grid grid-cols-2 gap-4">
-        <a href="https://t.me/+HrEHLM9TOnowMDll" target="_blank" 
-           class="flex items-center justify-center gap-2 py-4 bg-[#229ED9] rounded-2xl font-bold text-sm btn-hover shadow-lg shadow-[#229ED9]/20">
-            Telegram
-        </a>
-        <a href="coming_soon.html" 
-           class="flex items-center justify-center gap-2 py-4 bg-white text-black rounded-2xl font-bold text-sm btn-hover">
-            Main Site
-        </a>
+        <a href="https://t.me/+HrEHLM9TOnowMDll" target="_blank" class="flex items-center justify-center gap-2 py-4 bg-[#229ED9] rounded-2xl font-bold text-sm btn-hover shadow-lg shadow-[#229ED9]/20">Telegram</a>
+        <a href="coming_soon.html" class="flex items-center justify-center gap-2 py-4 bg-white text-black rounded-2xl font-bold text-sm btn-hover">Main Site</a>
     </div>
 
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script>
-        var swiper = new Swiper(".mySwiper", { loop: true, autoplay: { delay: 3000 } });
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-        function collectCoin() {
-            alert("Coin collected! Daily bonus added.");
-        }
+        const firebaseConfig = { /* আপনার কনফিগ এখানে বসান */ };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        const userId = localStorage.getItem("user_id"); // লগইন করা ইউজার আইডি
 
-        function react(emoji) {
-            alert("You reacted with " + emoji);
-            // Firebase-এ রিয়েক্ট সেভ করার কোড এখানে হবে
-        }
+        window.collectCoin = async function() {
+            const userRef = ref(db, 'users/' + userId);
+            const snapshot = await get(userRef);
+            const data = snapshot.val();
+            
+            const now = new Date().getTime();
+            const lastClaim = data.lastClaimTime || 0;
+            const day = 24 * 60 * 60 * 1000;
+
+            if (now - lastClaim >= day) {
+                update(userRef, {
+                    coins: (data.coins || 0) + 1,
+                    lastClaimTime: now
+                }).then(() => alert("Coin Claimed Successfully!"));
+            } else {
+                const hoursLeft = Math.round((day - (now - lastClaim)) / (1000 * 60 * 60));
+                alert("Please wait " + hoursLeft + " hours to claim again.");
+            }
+        };
     </script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>var swiper = new Swiper(".mySwiper", { loop: true, autoplay: { delay: 3000 } });</script>
 </body>
 </html>
